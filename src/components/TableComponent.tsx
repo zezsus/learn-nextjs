@@ -10,12 +10,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  styled,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import PreviewIcon from "@mui/icons-material/Preview";
 import { useState } from "react";
 import EditComponent from "./EditComponent";
+import DeleteComponent from "./DeleteComponent";
+import Link from "next/link";
 
 interface IProps {
   blogs: IBlog[];
@@ -25,20 +28,21 @@ export default function TableComponent(props: IProps) {
   const { blogs } = props;
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [showDelete, setShowDelete] = useState<boolean>(false);
-  const [editItem, setEidtItem] = useState<IBlog>({
+  const [blog, setBlog] = useState<IBlog>({
     id: 0,
     title: "",
     author: "",
     content: "",
   });
 
-  const handleEidt = (editItem: any) => {
+  const handleEidt = (editItem: IBlog) => {
     setShowEdit(true);
-    setEidtItem(editItem);
+    setBlog(editItem);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (deleteItem: IBlog) => {
     setShowDelete(true);
+    setBlog(deleteItem);
   };
 
   return (
@@ -73,14 +77,16 @@ export default function TableComponent(props: IProps) {
                     <TableCell>{item.author}</TableCell>
                     <TableCell align='center'>
                       <IconButton>
-                        <PreviewIcon color='primary' titleAccess='View' />
+                        <NavLink href={`/blogs/${item.id}`}>
+                          <PreviewIcon color='primary' titleAccess='View' />
+                        </NavLink>
                       </IconButton>
 
                       <IconButton onClick={() => handleEidt(item)}>
                         <EditCalendarIcon color='warning' titleAccess='Edit' />
                       </IconButton>
 
-                      <IconButton onClick={() => handleDelete(item.id)}>
+                      <IconButton onClick={() => handleDelete(item)}>
                         <DeleteForeverIcon color='error' titleAccess='Delete' />
                       </IconButton>
                     </TableCell>
@@ -95,10 +101,23 @@ export default function TableComponent(props: IProps) {
         <EditComponent
           showEdit={showEdit}
           setShowEdit={setShowEdit}
-          editItem={editItem}
-          setEditItem={setEidtItem}
+          blog={blog}
+        />
+      )}
+
+      {showDelete && (
+        <DeleteComponent
+          showDelete={showDelete}
+          setShowDelete={setShowDelete}
+          blog={blog}
         />
       )}
     </Container>
   );
 }
+
+const NavLink = styled(Link)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});

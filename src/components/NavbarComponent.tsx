@@ -11,13 +11,15 @@ import {
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function NavbarComponent() {
+  const router = useRouter();
   return (
     <AppBar position='static'>
       <NavContent>
         <NavLogo>
-          <IconButton>
+          <IconButton onClick={() => router.push("/")}>
             <HomeIcon />
           </IconButton>
           <Typography variant='h6' fontSize={16}>
@@ -25,7 +27,7 @@ export default function NavbarComponent() {
           </Typography>
         </NavLogo>
         <ListLink>
-          <NavLink href='/'>Home</NavLink>
+          <NavLink href='/blogs'>Home</NavLink>
           <NavLink href='/about'>About</NavLink>
         </ListLink>
       </NavContent>
